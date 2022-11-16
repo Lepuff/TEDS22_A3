@@ -11,7 +11,15 @@ messagescount = 0
 
 # define the rdf graph
 
-
+ns_rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+ns_rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
+ns_xsd = Namespace("http://www.w3.org/2001/XMLSchema#")
+sosa = Namespace("http://www.w3.org/ns/sosa/")
+ns_time = Namespace("http://www.w3.org/2006/time#")
+ns_qudt = Namespace("http://qudt.org/1.1/schema/qudt#")
+ns_qudt_unit = Namespace("http://qudt.org/vocab/unit#")
+ns_cdt = Namespace("http://w3id.org/lindt/custom_datatypes#")
+ns_base = Namespace("http://w3id.org/lindt/")
 
 
 """"
