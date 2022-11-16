@@ -4,24 +4,38 @@ import numpy as np
 import datetime
 from rdflib.namespace import RDF, RDFS, XSD, SOSA, TIME
 from rdflib import Namespace
+from rdflib import Graph, Literal, URIRef
 messages = []
 messagescount = 0
 
 
 
 # define the rdf graph
+# namespaces
 
-ns_rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-ns_rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
-ns_xsd = Namespace("http://www.w3.org/2001/XMLSchema#")
-sosa = Namespace("http://www.w3.org/ns/sosa/")
-ns_time = Namespace("http://www.w3.org/2006/time#")
-ns_qudt = Namespace("http://qudt.org/1.1/schema/qudt#")
-ns_qudt_unit = Namespace("http://qudt.org/vocab/unit#")
-ns_cdt = Namespace("http://w3id.org/lindt/custom_datatypes#")
-ns_base = Namespace("http://w3id.org/lindt/")
+g = Graph()
+g.bind("sosa", SOSA)
+g.bind("time", TIME)
+g.bind("xsd", XSD)
+g.bind("rdfs", RDFS)
+g.bind("rdf", RDF)
+
+g.bind("qudt-1-1", Namespace("http://qudt.org/1.1/schema/qudt#"))
+g.bind("qudt-unit-1-1", Namespace("http://qudt.org/1.1/vocab/quantity#"))
+g.bind("cdt", Namespace("http://w3id.org/lindt/custom_datatypes#"))
+ns_base = Namespace("http://example.org/data/")
+g.bind("base", ns_base)
+
+#types
+
+earthAtmosphere = ns_base['earthAtmospher']
+g.add(earthAtmosphere,RDF.type, SOSA.FeatureOfInterest)
+g.add(earthAtmosphere, RDF.label, Literal("Earth Atmosphere", lang="en"))
 
 
+
+
+#the template for the rdf graph
 """"
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
