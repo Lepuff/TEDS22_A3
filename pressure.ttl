@@ -1,0 +1,88 @@
+@prefix base: <http://example.org/data/> .
+@prefix cdt: <http://w3id.org/lindt/custom_datatypes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/data/Observation/0> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1199.05"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:32+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/1> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1199.69"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:33+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/2> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1200.24"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:34+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/3> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1200.98"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:35+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/4> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1201.60"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:36+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/5> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1200.16"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:37+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/6> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1200.24"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:38+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/7> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1199.88"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:39+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/8> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1200.07"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:40+00:00"^^xsd:dateTime .
+
+<http://example.org/data/Observation/9> a sosa:Observation ;
+    sosa:hasFeatureOfInterest base:earthAtmosphere ;
+    sosa:hasSimpleResult "1198.55"^^cdt:Pascal ;
+    sosa:madeBySensor base:sensor_bmp282 ;
+    sosa:observedProperty base:sensor_bmp282 ;
+    sosa:resultTime "2022-11-16T15:38:41+00:00"^^xsd:dateTime .
+
+base:iphone a sosa:Platform ;
+    rdfs:label "iPhone"@en ;
+    rdfs:comment "Apple iPhone 7"@en ;
+    sosa:hosts base:sensor_bmp282 .
+
+base:earthAtmosphere a sosa:FeatureOfInterest ;
+    rdfs:label "Earth Atmosphere"@en .
+
+base:sensor_bmp282 a sosa:Sensor ;
+    rdfs:label "Bosch Sensortec BMP282"@en ;
+    sosa:observes base:sensor_atmospheric_pressure .
+

@@ -12,7 +12,6 @@ messagescount = 0
 
 # define the rdf graph
 # namespaces
-
 g = Graph()
 g.bind("sosa", SOSA)
 g.bind("time", TIME)
@@ -20,52 +19,36 @@ g.bind("xsd", XSD)
 g.bind("rdfs", RDFS)
 g.bind("rdf", RDF)
 
-g.bind("qudt-1-1", Namespace("http://qudt.org/1.1/schema/qudt#"))
-g.bind("qudt-unit-1-1", Namespace("http://qudt.org/1.1/vocab/quantity#"))
-g.bind("cdt", Namespace("http://w3id.org/lindt/custom_datatypes#"))
-ns_base = Namespace("http://example.org/data/")
-g.bind("base", ns_base)
+qudt = Namespace("http://qudt.org/1.1/schema/qudt#")
+g.bind("qudt-1-1", qudt)
+qudt_unit = Namespace("http://qudt.org/1.1/vocab/quantity#")
+g.bind("qudt-unit-1-1", qudt_unit)
+cdt = Namespace("http://w3id.org/lindt/custom_datatypes#")
+g.bind("cdt", cdt)
+base = Namespace("http://example.org/data/")
+g.bind("base", base)
 
 #types
 
-earthAtmosphere = ns_base['earthAtmospher']
-g.add(earthAtmosphere,RDF.type, SOSA.FeatureOfInterest)
-g.add(earthAtmosphere, RDF.label, Literal("Earth Atmosphere", lang="en"))
+earthAtmosphere = base['earthAtmosphere']
+g.add((earthAtmosphere,RDF.type, SOSA.FeatureOfInterest))
+g.add((earthAtmosphere, RDFS.label, Literal("Earth Atmosphere", lang="en")))
+
+sensor_atmospheric_pressure = base['sensor_atmospheric_pressure']
+
+sensor_bmp282 = base['sensor_bmp282']
+g.add((sensor_bmp282, RDF.type, SOSA.Sensor))
+g.add((sensor_bmp282, RDFS.label, Literal("Bosch Sensortec BMP282", lang="en")))
+g.add((sensor_bmp282,SOSA.observes,sensor_atmospheric_pressure))
+
+iphone = base['iphone']
+g.add((iphone, RDF.type ,SOSA.Platform))
+g.add((iphone, RDFS.label,Literal("iPhone", lang="en")))
+g.add((iphone,RDFS.comment,Literal("Apple iPhone 7", lang="en")))
+g.add((iphone, SOSA.hosts, sensor_bmp282))
 
 
 
-
-#the template for the rdf graph
-""""
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix sosa: <http://www.w3.org/ns/sosa/> .
-@prefix time: <http://www.w3.org/2006/time#>.
-@prefix qudt-1-1: <http://qudt.org/1.1/schema/qudt#> .
-@prefix qudt-unit-1-1: <http://qudt.org/1.1/vocab/unit#> .
-@prefix cdt: <http://w3id.org/lindt/custom_datatypes#> .
-@base <http://example.org/data/> .
-
-# The barometric readings from a Bosch Sensortec BMP282 sensor in an Apple IPhone 7
-# observed on June 6 2017 using only the SOSA core for modelling.
-
-<earthAtmosphere> rdf:type sosa:FeatureOfInterest ;
-  rdfs:label "Atmosphere of Earth"@en .
-
-
-# An iPhone 7 as the Platform that hosts several sensors,
-# among others the Bosch Sensortec BMP282 atmospheric pressure sensor.
-
-<iphone7/35-207306-844818-0> a sosa:Platform ;
-  rdfs:label "IPhone 7 - IMEI 35-207306-844818-0"@en ;
-  rdfs:comment "IPhone 7 - IMEI 35-207306-844818-0 - John Doe"@en ;
-  sosa:hosts <sensor/35-207306-844818-0/BMP282> .
-
-<sensor/35-207306-844818-0/BMP282> rdf:type sosa:Sensor ;
-  rdfs:label "Bosch Sensortec BMP282"@en ;
-  sosa:observes <sensor/35-207306-844818-0/BMP282/atmosphericPressure> .
-"""
 
 print("creating new instance")
 client = mqtt.Client("P2")     # create new instance (the ID, in this case "P1", must be unique)
@@ -78,7 +61,22 @@ def on_message(client, userdata, message):
     print(f"message topic: {message.topic}")
     print(f"message qos: {message.qos}")
     print(f"message retain flag: {message.retain}")
-    messages.append(message.payload.decode('utf-8'))
+    #split the message
+    message = message.payload.decode('utf-8')
+    [value,  timestamp] = message.split('|')
+  
+
+    #add to the rdf graph
+    #observation
+
+    observation = base['Observation/' + str(messagescount)]
+    g.add((observation, RDF.type, SOSA.Observation))
+    g.add((observation, SOSA.observedProperty, sensor_bmp282))
+    g.add((observation, SOSA.hasFeatureOfInterest, earthAtmosphere))
+    g.add((observation, SOSA.madeBySensor, sensor_bmp282))
+    g.add((observation,SOSA.hasSimpleResult,Literal(value, datatype=cdt.Pascal)))
+    g.add((observation, SOSA.resultTime, Literal(timestamp, datatype=XSD.dateTime)))
+    messages.append(message)
     messagescount += 1
     time.sleep(1)
 client.on_message = on_message # attach "on_message" callback function (event handler) to "on_message" event
@@ -109,3 +107,7 @@ client.loop_stop()  # stop the event processing loop
 #disconnect from broker
 print("\ndisconnecting from broker")
 client.disconnect() # disconnect from broker
+
+
+#save the rdf graph
+g.serialize(destination='pressure.ttl')
