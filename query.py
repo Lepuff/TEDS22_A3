@@ -11,11 +11,12 @@ g.parse("pressure.ttl", format="turtle")
 qres = g.query('''
 SELECT DISTINCT ?hasSimpleResult ?resultTime
 WHERE {
-    sosa:hasSimpleResult ?hasSimpleResult & sosa:resultTime ?resultTim
+    {?observation sosa:hasSimpleResult ?hasSimpleResult}
+
+    {?observation sosa:resultTime ?resultTime.}
 }
-order by asc(?resultTime)
- 
+ORDER BY ?resultTime
 ''')
 
-print(qres)
-
+for row in qres:
+    print("%s %s" % row)
