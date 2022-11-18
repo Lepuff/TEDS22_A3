@@ -49,7 +49,7 @@ g.add((iphone, SOSA.hosts, sensor_bmp282))
 
 
 print("creating new instance")
-client = mqtt.Client("P2")     # create new instance (the ID, in this case "P1", must be unique)
+client = mqtt.Client("SUB")     # create new instance (the ID, in this case "P1", must be unique)
 
 def on_message(client, userdata, message):
     global messages
