@@ -48,13 +48,10 @@ g.add((iphone,RDFS.comment,Literal("Apple iPhone 7", lang="en")))
 g.add((iphone, SOSA.hosts, sensor_bmp282))
 
 
-
-
 print("creating new instance")
 client = mqtt.Client("P2")     # create new instance (the ID, in this case "P1", must be unique)
 
 def on_message(client, userdata, message):
-    
     global messages
     global messagescount
     print(f"\nmessage payload: {message.payload.decode('utf-8')}")
@@ -64,10 +61,8 @@ def on_message(client, userdata, message):
     #split the message
     message = message.payload.decode('utf-8')
     [value,  timestamp] = message.split('|')
-  
 
     #add to the rdf graph
-    #observation
 
     observation = base['Observation/' + str(messagescount)]
     g.add((observation, RDF.type, SOSA.Observation))
@@ -82,7 +77,6 @@ def on_message(client, userdata, message):
 client.on_message = on_message # attach "on_message" callback function (event handler) to "on_message" event
 
 
-#broker_address = "localhost" # Use your own MQTT Server IP Adress (or domain name) here, or ...
 broker_address = "test.mosquitto.org" # ... use the Mosquitto test server during development
 topic = 'teds22/group2/pressure'
 
@@ -90,23 +84,26 @@ print("connecting to broker")
 client.connect(broker_address) # connect to broker
 client.subscribe(topic) # subscribe
 client.loop_start()            # start the event processing loop
-# Create an "on_message" callback function (event handler) for the "on_message" event
 
 
-# wait for 10 messages
 
 
-while messagescount < 10:
-    pass
+
+
+#run while a q is not pressed
+while True:
+    if(input() == 'q'):
+        break
+
 
 # unsubscribe from topic
 print("Unsubscribing from topic: {topic}")
-client.unsubscribe(topic) # unsubscribe
-client.loop_stop()  # stop the event processing loop
+client.unsubscribe(topic) 
+client.loop_stop()
 
 #disconnect from broker
 print("\ndisconnecting from broker")
-client.disconnect() # disconnect from broker
+client.disconnect()
 
 
 #save the rdf graph
